@@ -56,6 +56,8 @@ function App() {
 
   return (
     <div className="App">
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Suscipit, dolores. Nemo ipsa id, beatae sunt velit voluptatibus quos illo voluptate sequi! Temporibus ex nemo quo in tenetur explicabo velit totam.
+
       <input type="text" onChange={(e) => handleCountrySearch(e)} />
       <div>
         <div>
