@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react'
+import CountryList from './Components/CountryList';
+import { compare } from './helpers';
 
 function App() {
+  const [searchTerm, setSearchTerm] = useState('');
   const [data, setData] = useState([]);
-  const [searchTerm, setSearchTerm] = useState();
 
   useEffect(() => {
     (async () => {
@@ -11,58 +13,78 @@ function App() {
         const json = await res.json();
 
         const result = json.map(country => ({
-          id: Math.random().toString(36).substring(3, 8),
+          id: country.name.common,
           name: country.name.common,
           isSelected: false,
           isDisabled: false,
         }));
 
-        setData(result);
+        setData(result.sort(compare));
       } catch (e) {
         console.log(e);
       }
     })()
   }, []);
 
+  let filteredData = data.filter(item => {
+    if (searchTerm === '') {
+      return item;
+    } else {
+      return item.name.toLowerCase().includes(searchTerm)
+    }
+  });
+
+  console.log(filteredData);
+
   const handleCountrySelect = (e) => {
-    const id = e.target.id;
+    const { id, value, checked } = e.target;
 
-    setData(prevState => {
-      const target = prevState.filter(item => item.id === id ? item.isSelected = true : null);
-      console.log(target);
-
-      return [
-        ...target
-      ];
-    })
+    if (checked) {
+      // push selected value in list
+      setData(prev => {
+        return [
+          ...prev.filter(item => item.id === id ? item.isSelected = true : item)
+        ]
+      });
+    } else {
+      // remove unchecked value from the list
+      setData(prev => {
+        return [
+          ...prev.filter(item => item.id === id && item.isSelected ? !item.isSelected : item)
+        ]
+      });
+    }
   }
 
   const handleCountrySearch = (e) => {
-    setSearchTerm(e.target.value);
+    let result = e.target.value.toLowerCase().trim();
+    setSearchTerm(result);
+  }
 
-    const filtered = !searchTerm
-      ? data
-      : data.filter(item => item.name.toLowerCase().includes(searchTerm.toLowerCase()))
+  const handleSelectedOnly = (e) => {
+    console.log(e);
+  }
 
-    console.log(filtered);
-
-    setData(prevState => {
-      return [
-        ...prevState,
-        filtered
-      ]
-    })
+  const handleSave = (e) => {
+    console.log(e);
+    alert(JSON.stringify(filteredData, null, 2))
   }
 
   return (
     <div className="App">
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Suscipit, dolores. Nemo ipsa id, beatae sunt velit voluptatibus quos illo voluptate sequi! Temporibus ex nemo quo in tenetur explicabo velit totam.
-
-      <input type="text" onChange={(e) => handleCountrySearch(e)} />
+      <input
+        type="text"
+        value={searchTerm}
+        onChange={(e) => handleCountrySearch(e)}
+      />
       <div>
         <div>
           <label htmlFor="selectedOnly">
-            <input type="checkbox" name="" id="selectedOnly" />
+            <input
+              type="checkbox"
+              id="selectedOnly"
+              onChange={e => handleSelectedOnly(e)}
+            />
             Show selected only
           </label>
 
@@ -72,29 +94,13 @@ function App() {
         </div>
 
         <div style={{ height: '350px', width: '350px', overflow: 'auto' }}>
-          <ul>
-            {
-              data.map(country => {
-                return (
-                  <li key={country.id}>
-                    <label htmlFor={country.id}>
-                      <input
-                        type="checkbox"
-                        checked={country.isSelected}
-                        disabled={country.isDisabled}
-                        id={country.id}
-                        onChange={(e) => handleCountrySelect(e)}
-                      />
-                      {country.name}
-                    </label>
-                  </li>
-                )
-              })
-            }
-          </ul>
+          <CountryList
+            handleCountrySelect={handleCountrySelect}
+            data={filteredData}
+          />
         </div>
 
-        <button>
+        <button onClick={(e) => handleSave(e)}>
           save
         </button>
       </div>
