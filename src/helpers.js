@@ -1,4 +1,4 @@
-export const compare = (a, b) => {
+export const compareName = (a, b) => {
   if (a.name > b.name) {
     return 1;
   }
@@ -7,4 +7,9 @@ export const compare = (a, b) => {
   }
   // a должно быть равным b
   return 0;
+}
+
+export const isSelectedFilter = (item) => {
+  // console.log('isSelectedFilter', item);
+  return item.isSelected ? item : null;
 }

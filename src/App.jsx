@@ -1,56 +1,39 @@
 import { useState, useEffect } from 'react'
 import CountryList from './Components/CountryList';
-import { compare } from './helpers';
+import Search from './Components/Search';
+import Filter from './Components/Filter';
+import { isSelectedFilter } from './helpers';
 
-function App() {
+function App({ initialData }) {
   const [searchTerm, setSearchTerm] = useState('');
-  const [data, setData] = useState([]);
+  const [data, setData] = useState(initialData);
+  const [activeFilter, setActiveFilter] = useState(null);
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const res = await fetch('https://restcountries.com/v3.1/all');
-        const json = await res.json();
+  const filters = {
+    1: 'Show selected only'
+  };
 
-        const result = json.map(country => ({
-          id: country.name.common,
-          name: country.name.common,
-          isSelected: false,
-          isDisabled: false,
-        }));
-
-        setData(result.sort(compare));
-      } catch (e) {
-        console.log(e);
-      }
-    })()
-  }, []);
-
-  let filteredData = data.filter(item => {
-    if (searchTerm === '') {
-      return item;
-    } else {
-      return item.name.toLowerCase().includes(searchTerm)
-    }
-  });
-
-  console.log(filteredData);
+  // let filteredData = data.filter(item => {
+  //   if (searchTerm === '') {
+  //     return item;
+  //   } else {
+  //     return item.name.toLowerCase().includes(searchTerm)
+  //   }
+  // });
 
   const handleCountrySelect = (e) => {
     const { id, value, checked } = e.target;
 
     if (checked) {
-      // push selected value in list
-      setData(prev => {
+      setData(prevState => {
         return [
-          ...prev.filter(item => item.id === id ? item.isSelected = true : item)
+          ...prevState.filter(item => item.id === id ? item.isSelected = true : item)
         ]
       });
     } else {
-      // remove unchecked value from the list
-      setData(prev => {
+      setData(prevState => {
         return [
-          ...prev.filter(item => item.id === id && item.isSelected ? !item.isSelected : item)
+          ...prevState,
         ]
       });
     }
@@ -70,34 +53,77 @@ function App() {
     alert(JSON.stringify(filteredData, null, 2))
   }
 
+  const onFilter = (e) => {
+    console.log('filter', e.target);
+    setActiveFilter();
+  }
+
   return (
     <div className="App">
-      <input
-        type="text"
-        value={searchTerm}
-        onChange={(e) => handleCountrySearch(e)}
+      <Search
+        onSearch={e => setSearchTerm(e.target.value)}
       />
-      <div>
-        <div>
-          <label htmlFor="selectedOnly">
-            <input
-              type="checkbox"
-              id="selectedOnly"
-              onChange={e => handleSelectedOnly(e)}
-            />
-            Show selected only
-          </label>
 
-          <button>
-            clear all
-          </button>
-        </div>
+      <div>
+        {
+          Object.entries(filters).map((filter) => {
+            return (
+              <Filter
+                key={filter}
+                data={filter}
+                onFilter={e => onFilter(e)}
+              />
+            )
+          })
+        }
 
         <div style={{ height: '350px', width: '350px', overflow: 'auto' }}>
-          <CountryList
-            handleCountrySelect={handleCountrySelect}
-            data={filteredData}
-          />
+          {/* {posts
+            ?.filter((el) =>
+              el.title
+                .toLowerCase()
+                .includes(inputValue.toLowerCase()),
+            )
+            .filter((e) => e.status.includes(activeFilter))
+            .map(
+              (
+                post: { title: string; status: string },
+                index: number,
+              ) => {
+                return (
+                  <Card
+                    key={index}
+                    title={post.title}
+                    status={post.status}
+                  />
+                );
+              },
+            )} */}
+
+          {/* item.name.toLowerCase().includes(searchTerm) */}
+
+          {data
+            ?.filter(item =>
+              item.name
+                .toLowerCase()
+                .includes(
+                  searchTerm.toLowerCase()
+                ))
+            .filter(isSelectedFilter)
+            .map((item, index) => {
+              return (
+                <p key={item.id}>
+                  {item.name}
+                </p>
+              )
+              // return (
+              //   <CountryList
+              //     handleCountrySelect={handleCountrySelect}
+              //     data={item}
+              //   />
+              // )
+            })
+          }
         </div>
 
         <button onClick={(e) => handleSave(e)}>

@@ -1,11 +1,5 @@
 function CountryList({ data, handleCountrySelect }) {
-  // const handleCountrySelect = (e) => {
-  //   const { id, value, checked } = e.target;
-
-  //   console.log(id);
-  //   console.log(value);
-  //   console.log(checked);
-  // }
+  if (!data.length) return <h1>Nothing is here</h1>
 
   return (
     <ul>
