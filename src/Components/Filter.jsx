@@ -1,20 +1,28 @@
 import React from 'react';
 
-const Filter = ({ data, onFilter }) => {
+const Filter = ({ data, activeFilter, onFilter }) => {
+  let name;
+
+  switch (data[0]) {
+    case 'selectedOnly':
+      name = 'Show selected only';
+      break;
+
+    default:
+      name = 'All'
+  }
+
   return (
     <div>
-      <label htmlFor={data.title}>
+      <label htmlFor={data[0]}>
         <input
           type="checkbox"
-          id={data.title}
+          checked={activeFilter === data[0] ? true : false}
+          id={data[0]}
           onChange={onFilter}
         />
-        {data.title}
+        {name}
       </label>
-
-      {/* <button>
-        clear all
-      </button> */}
     </div>
   );
 }

@@ -8,7 +8,7 @@ const getAllCountries = async () => {
     const result = json.map(country => ({
       id: country.name.common,
       name: country.name.common,
-      isSelected: country.name.common === 'Afghanistan' ? true : false,
+      isSelected: false,
       isDisabled: false,
     }));
 

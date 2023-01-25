@@ -2,6 +2,9 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App'
 import { getAllCountries } from './API'
+import './style.css'
+
+
 let data = (function () {
   let countries = localStorage.getItem('countries');
 
@@ -11,6 +14,8 @@ let data = (function () {
     })
   }
   return JSON.parse(countries);
+
+  // return []
 })();
 
 ReactDOM.createRoot(document.getElementById('root')).render(
