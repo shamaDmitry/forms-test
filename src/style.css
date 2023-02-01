@@ -6,6 +6,6 @@
   box-sizing: border-box;
 }
 
-.test {
-  /* font-family: 'CamptonBook'; */
+body {
+  font-family: 'Campton', sans-serif;
 }
