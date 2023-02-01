@@ -2,7 +2,9 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App'
 import { getAllCountries } from './API'
+import 'virtual:fonts.css'
 import './style.css'
+
 
 let data = async function () {
   let countries = localStorage.getItem('countries');
