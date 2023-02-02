@@ -5,7 +5,6 @@ import { getAllCountries } from './API'
 import 'virtual:fonts.css'
 import './style.css'
 
-
 let data = async function () {
   let countries = localStorage.getItem('countries');
 
@@ -13,7 +12,7 @@ let data = async function () {
     const res = await getAllCountries();
     localStorage.setItem('countries', JSON.stringify(res))
     let countries = localStorage.getItem('countries');
-    
+
     return JSON.parse(countries)
   }
 

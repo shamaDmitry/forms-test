@@ -2,11 +2,12 @@ import React from 'react';
 
 const Search = ({ value, onSearch }) => {
   return (
-    <div>
+    <div className="border-b border-[#ececec] mb-[23px]">
       <input
-        style={{ width: '100%', margin: '0 0 20px 0' }}
-        type="text"
+        className="py-[6px] block w-full m-0 focus:outline-none leading-[19px]"
+        type="search"
         value={value}
+        placeholder="Search"
         onChange={onSearch}
       />
     </div>

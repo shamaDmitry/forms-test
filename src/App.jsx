@@ -117,33 +117,36 @@ function App({ initialData }) {
   }
 
   return (
-    <div className="App" style={{ maxWidth: '300px', margin: '0 auto' }}>
+    <div className="w-full border border-[#E1E3E6] rounded-[14px] my-8 mx-auto p-[20px] shadow-lg max-w-[490px] max-[580px]:max-w-[90%]">
       <Search
         value={searchTerm}
         onSearch={e => setSearchTerm(e.target.value)}
       />
 
-      <div>
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          {
-            Object.entries(FILTER_MAP).filter(item => item[0] !== 'all').map((filter) => {
-              return (
-                <Filter
-                  key={filter}
-                  data={filter}
-                  activeFilter={activeFilter}
-                  onFilter={event => onFilter(event, filter[0])}
-                />
-              )
-            })
-          }
+      <div className="flex justify-between items-center mb-[10px]">
+        {
+          Object.entries(FILTER_MAP).filter(item => item[0] !== 'all').map((filter) => {
+            return (
+              <Filter
+                key={filter}
+                data={filter}
+                activeFilter={activeFilter}
+                onFilter={event => onFilter(event, filter[0])}
+              />
+            )
+          })
+        }
 
-          <button onClick={onClearAll}>
-            clear all
-          </button>
-        </div>
+        <button
+          className="text-[#232323] leading-[22px] font-medium focus:outline-none"
+          onClick={onClearAll}
+        >
+          Clear all
+        </button>
+      </div>
 
-        <div style={{ height: '350px', overflow: 'auto' }}>
+      <div className="h-[252px] relative overflow-y-auto">
+        <div className="pt-[10px] pb-[15px] absolute left-0 top-0 h-full w-full">
           {data
             ?.filter(item =>
               item.name
@@ -164,16 +167,16 @@ function App({ initialData }) {
             })
           }
         </div>
+      </div>
 
-        <div style={{ padding: '20px' }}>
-          <button
-            className='rounded-[50px] px-[25px] py-[8px] bg-red-900 text-white'
-            disabled={!selectedData.length}
-            onClick={handleSave}
-          >
-            Save
-          </button>
-        </div>
+      <div className="flex justify-end mt-[10px] pt-[20px] border-t border-[#ECECEC]">
+        <button
+          className='rounded-[50px] px-[25px] py-[8px] bg-[#60D09B] text-white leading-[22px] -tracking-[0.5px] disabled:cur disabled:opacity-50'
+          disabled={!selectedData.length}
+          onClick={handleSave}
+        >
+          Save
+        </button>
       </div>
     </div>
   )
