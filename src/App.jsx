@@ -38,8 +38,6 @@ function App({ initialData }) {
   }
 
   const handleCountrySelect = (country) => (event) => {
-    console.log('render');
-
     const { id, checked } = event.target;
 
     if (checked) {
@@ -112,7 +110,6 @@ function App({ initialData }) {
   }
 
   const handleSave = (e) => {
-    console.log(e);
     alert(JSON.stringify(selectedData, null, 2))
   }
 
